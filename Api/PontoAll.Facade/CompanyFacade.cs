@@ -1,0 +1,43 @@
+﻿using PontoAll.Facade.Interfaces;
+using PontoAll.Models;
+using PontoAll.Models.Company;
+using PontoAll.Service.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PontoAll.Facade
+{
+    public class CompanyFacade : ICompanyFacade
+    {
+        private readonly ICompanyService _companyService;
+
+        public CompanyFacade(ICompanyService companyService)
+        {
+            _companyService = companyService;
+        }
+
+        public async Task RegisterCompany(CompanyInputModel companyInputModel)
+        {
+            bool haveValidData = await _companyService.VerifyCompanyData(companyInputModel);
+
+            if (haveValidData is default(bool)) 
+            {
+                throw new Exception(Constants.ERRO_COMPANY_DATA_EXISTS);
+            }
+
+            var company = new Company()
+            {
+                CNPJ = companyInputModel.CNPJ,
+                CorporateName = companyInputModel.CorporateName,
+                FantasyName = companyInputModel.FantasyName,
+                Email = companyInputModel.Email,
+                PhoneNumber = companyInputModel.PhoneNumber
+            };
+
+            await _companyService.RegisterCompany(company);
+        }
+    }
+}
