@@ -1,6 +1,7 @@
 ﻿using PontoAll.Facade.Interfaces;
 using PontoAll.Models;
-using PontoAll.Models.Company;
+using PontoAll.Models.Companys;
+using PontoAll.Models.User;
 using PontoAll.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,9 @@ namespace PontoAll.Facade
 
         public async Task RegisterCompany(CompanyInputModel companyInputModel)
         {
-            bool haveValidData = await _companyService.VerifyCompanyData(companyInputModel);
+            var companies = await _companyService.FindCompanyByIdentityData(companyInputModel);
 
-            if (haveValidData is default(bool)) 
+            if (companies.Count is default(int)) 
             {
                 throw new Exception(Constants.ERRO_COMPANY_DATA_EXISTS);
             }
@@ -34,10 +35,22 @@ namespace PontoAll.Facade
                 CorporateName = companyInputModel.CorporateName,
                 FantasyName = companyInputModel.FantasyName,
                 Email = companyInputModel.Email,
-                PhoneNumber = companyInputModel.PhoneNumber
+                PhoneNumber = companyInputModel.PhoneNumber,
+                CompanyId = Guid.NewGuid()
+            };
+            
+            await _companyService.RegisterCompany(company);
+
+            var admin = new ApplicationUser()
+            {
+                Email = company.Email,
+                UserName = company.FantasyName,
+                CompanyId = company.CompanyId
             };
 
-            await _companyService.RegisterCompany(company);
+            var password = companyInputModel.Password;
+
+            await _companyService.RegisterCompanyAdmin(admin, password);
         }
     }
 }

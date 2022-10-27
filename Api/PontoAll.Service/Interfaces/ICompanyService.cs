@@ -1,4 +1,5 @@
-﻿using PontoAll.Models.Company;
+﻿using PontoAll.Models.Companys;
+using PontoAll.Models.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace PontoAll.Service.Interfaces
 {
     public interface ICompanyService
     {
-        Task<bool> VerifyCompanyData(CompanyInputModel companyInputModel);
+        Task<List<Company>> FindCompanyByIdentityData(CompanyInputModel companyInputModel);
 
         Task RegisterCompany(Company company);
 
-        Task RegisterCompanyAdmin();
+        Task RegisterCompanyAdmin(ApplicationUser admin, string password);
     }
 }

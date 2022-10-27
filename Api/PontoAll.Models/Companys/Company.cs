@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PontoAll.Models.Company
+namespace PontoAll.Models.Companys
 {
     public class Company
     {
+        [Required]
+        public Guid CompanyId { get; set; }
+
         [Required]
         public string CorporateName { get; set; }
 

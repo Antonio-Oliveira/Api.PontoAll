@@ -1,4 +1,4 @@
-﻿using PontoAll.Models.Company;
+﻿using PontoAll.Models.Companys;
 using System;
 using System.Collections.Generic;
 using System.Linq;

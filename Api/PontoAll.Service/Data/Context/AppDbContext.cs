@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PontoAll.Models.Companys;
 using PontoAll.Models.User;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,10 @@ namespace PontoAll.Service.Data.Context
             base.OnModelCreating(modelBuilder);
         }
 
-        //public DbSet<Endereco> Enderecos { get; set; }
+        public DbSet<Address> Address { get; set; }
+
+        public DbSet<Company> Companies { get; set; }
+
     }
-    
+
 }

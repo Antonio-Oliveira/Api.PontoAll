@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PontoAll.Models.Company
+namespace PontoAll.Models.Companys
 {
     public class CompanyInputModel
     {
