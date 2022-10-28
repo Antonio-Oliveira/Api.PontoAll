@@ -154,73 +154,94 @@ namespace PontoAll.Service.Data.Migrations
                 {
                     b.Property<Guid>("CompanyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("COMPANY_ID");
 
                     b.Property<string>("CNPJ")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(14)
+                        .HasColumnType("nchar(14)")
+                        .HasColumnName("CNPJ")
+                        .IsFixedLength(true);
 
                     b.Property<string>("CorporateName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CORPORATE_NAME");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EMAIL");
 
                     b.Property<string>("FantasyName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FANTASY_NAME");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(13)
+                        .HasColumnType("nchar(13)")
+                        .HasColumnName("PHONE_NUMBER")
+                        .IsFixedLength(true);
 
                     b.HasKey("CompanyId");
 
-                    b.ToTable("Companies");
+                    b.ToTable("COMPANY");
                 });
 
             modelBuilder.Entity("PontoAll.Models.User.Address", b =>
                 {
                     b.Property<Guid>("AddressId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ADDRESS_ID");
 
                     b.Property<string>("CEP")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(8)
+                        .HasColumnType("nchar(8)")
+                        .HasColumnName("CEP")
+                        .IsFixedLength(true);
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CITY");
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("COUNTRY");
 
                     b.Property<string>("District")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DISTRICT");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NUMBER");
 
                     b.Property<string>("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("REFERENCE");
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("STATE");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("STREET");
 
                     b.HasKey("AddressId");
 
-                    b.ToTable("Address");
+                    b.ToTable("ADDRESS");
                 });
 
             modelBuilder.Entity("PontoAll.Models.User.ApplicationUser", b =>
@@ -231,20 +252,15 @@ namespace PontoAll.Service.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("AddressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CPF")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -289,8 +305,6 @@ namespace PontoAll.Service.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("NormalizedEmail")
@@ -302,6 +316,30 @@ namespace PontoAll.Service.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("PontoAll.Models.User.CollaboratorUser", b =>
+                {
+                    b.HasBaseType("PontoAll.Models.User.ApplicationUser");
+
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BIRTHDATE");
+
+                    b.Property<int>("CPF")
+                        .HasMaxLength(11)
+                        .HasColumnType("int")
+                        .HasColumnName("CPF")
+                        .IsFixedLength(true);
+
+                    b.HasIndex("AddressId");
+
+                    b.HasDiscriminator().HasValue("CollaboratorUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -357,21 +395,26 @@ namespace PontoAll.Service.Data.Migrations
 
             modelBuilder.Entity("PontoAll.Models.User.ApplicationUser", b =>
                 {
-                    b.HasOne("PontoAll.Models.User.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("PontoAll.Models.Companys.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
+                        .HasConstraintName("FK_COMPANY_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("PontoAll.Models.User.CollaboratorUser", b =>
+                {
+                    b.HasOne("PontoAll.Models.User.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .HasConstraintName("FK_ADDRESS_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Address");
-
-                    b.Navigation("Company");
                 });
 #pragma warning restore 612, 618
         }

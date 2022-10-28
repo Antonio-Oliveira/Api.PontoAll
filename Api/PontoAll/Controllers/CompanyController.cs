@@ -21,10 +21,16 @@ namespace PontoAll.Controllers
         }
 
 
-        public async Task<IActionResult> RegisterCompany(CompanyInputModel companyInputModel)
+        [HttpPost("RegisterCompany")]
+        public async Task<IActionResult> RegisterCompany([FromBody] CompanyInputModel companyInputModel)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    throw new Exception("Informações inválidas");
+                }
+
                 await _companyFacade.RegisterCompany(companyInputModel);
                 return Ok();
             }

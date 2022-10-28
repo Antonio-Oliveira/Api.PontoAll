@@ -14,25 +14,10 @@ namespace PontoAll.Service.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
-            builder.Property(u => u.CPF)
-                .IsRequired()
-                .HasMaxLength(Constants.CPF_LENGTH)
-                .IsFixedLength()
-                .HasColumnName("CPF");
-
-            builder.Property(u => u.BirthDate)
-                .IsRequired()
-                .HasColumnName("BIRTHDATE");
-
             builder.HasOne(u => u.Company)
                 .WithMany()
                 .HasForeignKey(fk => fk.CompanyId)
                 .HasConstraintName("FK_COMPANY_ID");
-
-            builder.HasOne(u => u.Address)
-                .WithMany()
-                .HasForeignKey(fk => fk.AddressId)
-                .HasConstraintName("FK_ADDRESS_ID");
         }
     }
 }

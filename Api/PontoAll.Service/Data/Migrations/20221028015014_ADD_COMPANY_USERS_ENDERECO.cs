@@ -3,27 +3,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PontoAll.Service.Data.Migrations
 {
-    public partial class Add_ApplicationUser_Address_Company : Migration
+    public partial class ADD_COMPANY_USERS_ENDERECO : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Address",
+                name: "ADDRESS",
                 columns: table => new
                 {
-                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CEP = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Reference = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ADDRESS_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    COUNTRY = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    STATE = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CEP = table.Column<string>(type: "nchar(8)", fixedLength: true, maxLength: 8, nullable: false),
+                    CITY = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    STREET = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DISTRICT = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NUMBER = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    REFERENCE = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Address", x => x.AddressId);
+                    table.PrimaryKey("PK_ADDRESS", x => x.ADDRESS_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,19 +41,19 @@ namespace PontoAll.Service.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Companies",
+                name: "COMPANY",
                 columns: table => new
                 {
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CorporateName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FantasyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CNPJ = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    COMPANY_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CORPORATE_NAME = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FANTASY_NAME = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CNPJ = table.Column<string>(type: "nchar(14)", fixedLength: true, maxLength: 14, nullable: false),
+                    PHONE_NUMBER = table.Column<string>(type: "nchar(13)", fixedLength: true, maxLength: 13, nullable: false),
+                    EMAIL = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Companies", x => x.CompanyId);
+                    table.PrimaryKey("PK_COMPANY", x => x.COMPANY_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,10 +82,11 @@ namespace PontoAll.Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CPF = table.Column<int>(type: "int", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CPF = table.Column<int>(type: "int", fixedLength: true, maxLength: 11, nullable: true),
+                    BIRTHDATE = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -105,16 +106,16 @@ namespace PontoAll.Service.Data.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Address_AddressId",
+                        name: "FK_ADDRESS_ID",
                         column: x => x.AddressId,
-                        principalTable: "Address",
-                        principalColumn: "AddressId",
+                        principalTable: "ADDRESS",
+                        principalColumn: "ADDRESS_ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Companies_CompanyId",
+                        name: "FK_COMPANY_ID",
                         column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "CompanyId",
+                        principalTable: "COMPANY",
+                        principalColumn: "COMPANY_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -277,10 +278,10 @@ namespace PontoAll.Service.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Address");
+                name: "ADDRESS");
 
             migrationBuilder.DropTable(
-                name: "Companies");
+                name: "COMPANY");
         }
     }
 }

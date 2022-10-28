@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PontoAll.Models.Companys;
 using PontoAll.Models.User;
+using PontoAll.Service.Data.Mappings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,10 @@ namespace PontoAll.Service.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new CompanyMapping());
+            modelBuilder.ApplyConfiguration(new ApplicationUserMapping());
+            modelBuilder.ApplyConfiguration(new CollaboratorUserMapping());
+            modelBuilder.ApplyConfiguration(new AddressMapping());
             base.OnModelCreating(modelBuilder);
         }
 

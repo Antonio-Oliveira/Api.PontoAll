@@ -24,7 +24,7 @@ namespace PontoAll.Facade
         {
             var companies = await _companyService.FindCompanyByIdentityData(companyInputModel);
 
-            if (companies.Count is default(int)) 
+            if (companies.Count != default(int)) 
             {
                 throw new Exception(Constants.ERRO_COMPANY_DATA_EXISTS);
             }
@@ -45,7 +45,7 @@ namespace PontoAll.Facade
             {
                 Email = company.Email,
                 UserName = company.FantasyName,
-                CompanyId = company.CompanyId
+                CompanyId = company.CompanyId,
             };
 
             var password = companyInputModel.Password;

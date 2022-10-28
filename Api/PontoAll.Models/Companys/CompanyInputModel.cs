@@ -30,7 +30,7 @@ namespace PontoAll.Models.Companys
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [RegularExpression(@"^\(?[1-9]{2}\)?\s?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$")]
+        //[RegularExpression(@"^\(?[1-9]{2}\)?\s?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$")]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]

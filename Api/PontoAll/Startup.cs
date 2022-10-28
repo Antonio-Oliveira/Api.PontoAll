@@ -12,8 +12,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
+using PontoAll.Facade;
+using PontoAll.Facade.Interfaces;
 using PontoAll.Models.User;
+using PontoAll.Service;
 using PontoAll.Service.Data.Context;
+using PontoAll.Service.Interfaces;
+using PontoAll.Service.Repositories;
+using PontoAll.Service.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,11 +46,62 @@ namespace PontoAll
                         options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                                 x => x.MigrationsAssembly("PontoAll.Service")));
 
+            #region Dependencies
+            AddFacade(services);
+            AddServices(services);
+            AddRepositories(services);
+            #endregion
+
+            #region Identity
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequireDigit = true;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+
+                //SignIn settings.
+                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+
+            }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
+            #endregion
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PontoAll", Version = "v1" });
             });
+        }
+
+        private void AddFacade(IServiceCollection services)
+        {
+            services.AddScoped<ICompanyFacade, CompanyFacade>();
+        }
+
+        private void AddRepositories(IServiceCollection services)
+        {
+            services.AddScoped<IUserRepository, UserRepository>()
+                    .AddScoped<ICompanyRepository, CompanyRepository>();
+        }
+
+        private void AddServices(IServiceCollection services)
+        {
+            services.AddScoped<ICompanyService, CompanyService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,7 +133,7 @@ namespace PontoAll
         {
             //initializing custom roles 
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
             string[] roleNames = { "Admin", "Manager", "Member" };
             IdentityResult roleResult;
 
