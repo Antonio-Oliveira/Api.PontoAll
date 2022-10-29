@@ -22,14 +22,11 @@ namespace PontoAll.Service
             _companyRepository = companyRepository;
         }
 
-        public async Task RegisterCompany(Company company)
+        public async Task<Guid> RegisterCompany(Company company)
         {
-            await _companyRepository.RegisterCompany(company);
-        }
+            var companyId = await _companyRepository.RegisterCompany(company);
 
-        public async Task RegisterCompanyAdmin(ApplicationUser admin, string password)
-        {
-            await _userRepository.RegisterAdmin(admin, password);
+            return companyId;
         }
 
         public async Task<List<Company>> FindCompanyByIdentityData(CompanyInputModel companyInputModel)

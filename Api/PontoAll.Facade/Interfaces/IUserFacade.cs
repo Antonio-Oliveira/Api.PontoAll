@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace PontoAll.Facade.Interfaces
 {
-    public interface ICompanyFacade
+    public interface IUserFacade
     {
-        Task<Guid> RegisterCompany(CompanyInputModel companyInputModel);
+        Task RegisterAdminForCompany(CompanyInputModel companyInputModel, Guid companyId);
     }
 }

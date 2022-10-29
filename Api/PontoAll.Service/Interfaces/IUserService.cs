@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PontoAll.Service.Repositories.Interfaces
+namespace PontoAll.Service.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserService
     {
         Task RegisterAdminForCompany(ApplicationUser admin, string password);
     }

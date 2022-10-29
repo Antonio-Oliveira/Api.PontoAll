@@ -28,10 +28,13 @@ namespace PontoAll.Service.Repositories
             return companies;
         }
 
-        public async Task RegisterCompany(Company company)
+        public async Task<Guid> RegisterCompany(Company company)
         {
             _context.Companies.Add(company);
+
             await _context.SaveChangesAsync();
+
+            return company.CompanyId;
         }
     }
 }

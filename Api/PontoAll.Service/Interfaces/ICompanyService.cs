@@ -12,8 +12,6 @@ namespace PontoAll.Service.Interfaces
     {
         Task<List<Company>> FindCompanyByIdentityData(CompanyInputModel companyInputModel);
 
-        Task RegisterCompany(Company company);
-
-        Task RegisterCompanyAdmin(ApplicationUser admin, string password);
+        Task<Guid> RegisterCompany(Company company);
     }
 }

@@ -9,7 +9,7 @@ namespace PontoAll.Service.Repositories.Interfaces
 {
     public interface ICompanyRepository
     {
-        Task RegisterCompany(Company company);
+        Task<Guid> RegisterCompany(Company company);
 
         Task<List<Company>> FindCompanyByIdentityData(CompanyInputModel companyInputModel);
     }

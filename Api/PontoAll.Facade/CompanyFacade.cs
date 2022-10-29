@@ -20,7 +20,7 @@ namespace PontoAll.Facade
             _companyService = companyService;
         }
 
-        public async Task RegisterCompany(CompanyInputModel companyInputModel)
+        public async Task<Guid> RegisterCompany(CompanyInputModel companyInputModel)
         {
             var companies = await _companyService.FindCompanyByIdentityData(companyInputModel);
 
@@ -39,18 +39,9 @@ namespace PontoAll.Facade
                 CompanyId = Guid.NewGuid()
             };
             
-            await _companyService.RegisterCompany(company);
+            var companyId = await _companyService.RegisterCompany(company);
 
-            var admin = new ApplicationUser()
-            {
-                Email = company.Email,
-                UserName = company.FantasyName,
-                CompanyId = company.CompanyId,
-            };
-
-            var password = companyInputModel.Password;
-
-            await _companyService.RegisterCompanyAdmin(admin, password);
+            return companyId;
         }
     }
 }

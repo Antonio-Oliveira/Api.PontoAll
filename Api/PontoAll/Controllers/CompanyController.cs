@@ -14,10 +14,12 @@ namespace PontoAll.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyFacade _companyFacade;
+        private readonly IUserFacade _userFacade;
 
-        public CompanyController(ICompanyFacade companyFacade)
+        public CompanyController(ICompanyFacade companyFacade, IUserFacade userFacade)
         {
             _companyFacade = companyFacade;
+            _userFacade = userFacade;
         }
 
 
@@ -31,7 +33,9 @@ namespace PontoAll.Controllers
                     throw new Exception("Informações inválidas");
                 }
 
-                await _companyFacade.RegisterCompany(companyInputModel);
+                var companyId = await _companyFacade.RegisterCompany(companyInputModel);
+                await _userFacade.RegisterAdminForCompany(companyInputModel, companyId);
+
                 return Ok();
             }
             catch (Exception err)

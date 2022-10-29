@@ -25,7 +25,7 @@ namespace PontoAll.Service.Repositories
             _roleManager = roleManager;
         }
 
-        public async Task RegisterAdmin(ApplicationUser admin, string password)
+        public async Task RegisterAdminForCompany(ApplicationUser admin, string password)
         {
             var createAdmin = await _userManager.CreateAsync(admin, password);
 
