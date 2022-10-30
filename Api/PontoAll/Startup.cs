@@ -11,9 +11,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PontoAll.Facade;
 using PontoAll.Facade.Interfaces;
+using PontoAll.Models.Token;
 using PontoAll.Models.User;
 using PontoAll.Service;
 using PontoAll.Service.Data.Context;
@@ -22,7 +24,10 @@ using PontoAll.Service.Repositories;
 using PontoAll.Service.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PontoAll
@@ -39,12 +44,11 @@ namespace PontoAll
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //  .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
-
+            #region DbContext
             services.AddDbContext<AppDbContext>(
                         options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                                 x => x.MigrationsAssembly("PontoAll.Service")));
+            #endregion
 
             #region Dependencies
             AddFacade(services);
@@ -81,27 +85,90 @@ namespace PontoAll
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
             #endregion
 
-            services.AddControllers();
+            #region JWT
+            var tokenSettingsSection = Configuration.GetSection("TokenSettings");
+            services.Configure<TokenSettings>(tokenSettingsSection);
+
+            var tokenSettings = tokenSettingsSection.Get<TokenSettings>();
+            var key = Encoding.ASCII.GetBytes(tokenSettings.Secret);
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = true;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = tokenSettings.Audience,
+                    ValidIssuer = tokenSettings.Issuer
+                };
+            });
+            #endregion
+
+            #region Swagger
             services.AddSwaggerGen(c =>
             {
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer schema (Example: 'Bearer 12345abcdef')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                       new OpenApiSecurityScheme
+                       {
+                           Reference = new OpenApiReference
+                           {
+                               Type = ReferenceType.SecurityScheme,
+                               Id = "Bearer"
+                           }
+                       },
+                       Array.Empty<string>()
+                    }
+                });
+
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PontoAll", Version = "v1" });
+
+                var basePath = AppDomain.CurrentDomain.BaseDirectory;
+                var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
+                c.IncludeXmlComments(Path.Combine(basePath, fileName));
             });
+            #endregion
+
+            services.AddControllers();
         }
 
         private void AddFacade(IServiceCollection services)
         {
-            services.AddScoped<ICompanyFacade, CompanyFacade>();
+            services.AddScoped<ICompanyFacade, CompanyFacade>()
+                    .AddScoped<IUserFacade, UserFacade>()
+                    .AddScoped<IAuthFacade, AuthFacade>();
         }
 
         private void AddRepositories(IServiceCollection services)
         {
-            services.AddScoped<IUserRepository, UserRepository>()
-                    .AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>()
+                    .AddScoped<IUserRepository, UserRepository>()
+                    .AddScoped<IAuthRepository, AuthRepository>();
+                    
         }
 
         private void AddServices(IServiceCollection services)
         {
-            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<ICompanyService, CompanyService>()
+                    .AddScoped<IUserService, UserService>()
+                    .AddScoped<IAuthService, AuthService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

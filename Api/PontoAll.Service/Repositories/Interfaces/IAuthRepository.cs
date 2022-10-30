@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace PontoAll.Service.Repositories.Interfaces
 {
-    public interface IUserRepository
+    public interface IAuthRepository
     {
-        Task RegisterAdminForCompany(ApplicationUser admin, string password);
-
-        Task<ApplicationUser> FindUserByEmailAsync(string email);
+        Task<SignInResult> SignInAsync(ApplicationUser user, string password);
     }
 }
+

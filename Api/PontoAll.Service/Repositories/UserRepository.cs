@@ -17,12 +17,18 @@ namespace PontoAll.Service.Repositories
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserRepository(AppDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
+        public UserRepository(AppDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
-            _signInManager = signInManager;
             _roleManager = roleManager;
+        }
+
+        public async Task<ApplicationUser> FindUserByEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            return user;
         }
 
         public async Task RegisterAdminForCompany(ApplicationUser admin, string password)

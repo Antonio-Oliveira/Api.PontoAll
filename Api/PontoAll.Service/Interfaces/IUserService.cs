@@ -10,5 +10,7 @@ namespace PontoAll.Service.Interfaces
     public interface IUserService
     {
         Task RegisterAdminForCompany(ApplicationUser admin, string password);
+
+        Task<ApplicationUser> FindUserByEmailAsync(string email);
     }
 }

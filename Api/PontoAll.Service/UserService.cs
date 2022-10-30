@@ -22,5 +22,12 @@ namespace PontoAll.Service
         {
             await _userRepository.RegisterAdminForCompany(admin, password);
         }
+
+        public async Task<ApplicationUser> FindUserByEmailAsync(string email)
+        {
+            var user = await _userRepository.FindUserByEmailAsync(email);
+
+            return user;
+        }
     }
 }
