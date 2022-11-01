@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PontoAll.Models.Companys;
+using PontoAll.Models.Dtos;
 using PontoAll.Service.Data.Context;
 using PontoAll.Service.Repositories.Interfaces;
 using System;

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PontoAll.Facade.Interfaces;
+using PontoAll.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,25 +21,11 @@ namespace PontoAll.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<UserViewModel>> Login(LoginInputModel loginIM)
+        public async Task<ActionResult> RegisterCollaborator(CollaboratorInputModel collaboratorInputModel)
         {
             try
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState.Values.SelectMany(err => err.Errors));
-
-                await _userFacade.Login(loginIM);
-                var token = await _userFacade.CreateToken(loginIM.Email);
-
-                /*
-                var userVM = new UserViewModel()
-                {
-                    Email = loginIM.Email,
-                    Token = token,
-                };
-                */
-
-                return Ok(userVM);
+                
             }
             catch (Exception err)
             {

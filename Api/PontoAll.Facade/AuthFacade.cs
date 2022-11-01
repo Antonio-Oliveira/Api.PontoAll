@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PontoAll.Facade.Interfaces;
-using PontoAll.Models.Auth;
+using PontoAll.Models.Dtos;
 using PontoAll.Models.Token;
 using PontoAll.Models.User;
 using PontoAll.Service.Interfaces;

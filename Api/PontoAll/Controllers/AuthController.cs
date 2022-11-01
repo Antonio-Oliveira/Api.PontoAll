@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PontoAll.Facade.Interfaces;
-using PontoAll.Models.Auth;
+using PontoAll.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

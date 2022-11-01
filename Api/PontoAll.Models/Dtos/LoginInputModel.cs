@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PontoAll.Models.Auth
+namespace PontoAll.Models.Dtos
 {
     public class LoginInputModel
     {

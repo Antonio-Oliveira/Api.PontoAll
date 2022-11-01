@@ -1,6 +1,7 @@
 ﻿using PontoAll.Facade.Interfaces;
 using PontoAll.Models;
 using PontoAll.Models.Companys;
+using PontoAll.Models.Dtos;
 using PontoAll.Models.User;
 using PontoAll.Service.Interfaces;
 using System;
