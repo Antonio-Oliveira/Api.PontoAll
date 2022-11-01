@@ -31,6 +31,13 @@ namespace PontoAll.Service.Repositories
             return user;
         }
 
+        public async Task<IList<string>> GetRoleAsync(ApplicationUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return roles;
+        }
+
         public async Task RegisterAdminForCompany(ApplicationUser admin, string password)
         {
             var createAdmin = await _userManager.CreateAsync(admin, password);

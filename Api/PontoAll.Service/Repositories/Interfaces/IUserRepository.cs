@@ -13,5 +13,7 @@ namespace PontoAll.Service.Repositories.Interfaces
         Task RegisterAdminForCompany(ApplicationUser admin, string password);
 
         Task<ApplicationUser> FindUserByEmailAsync(string email);
+
+        Task<IList<string>> GetRoleAsync(ApplicationUser user);
     }
 }

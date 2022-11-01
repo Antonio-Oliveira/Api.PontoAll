@@ -28,7 +28,7 @@ namespace PontoAll.Facade
             _tokenSettings = tokenSettings;
         }
 
-        private string GenerateToken(ApplicationUser user)
+        private string GenerateToken(ApplicationUser user, IList<string> roles)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_tokenSettings.Value.Secret);
@@ -39,6 +39,7 @@ namespace PontoAll.Facade
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email.ToString()),
                     new Claim(ClaimTypes.Name, user.UserName.ToString()),
+                    new Claim(ClaimTypes.Role, roles[0])
                 }),
                 Issuer = _tokenSettings.Value.Issuer,
                 Audience = _tokenSettings.Value.Audience,
@@ -55,11 +56,13 @@ namespace PontoAll.Facade
 
             if (user == null) ExceptionLogin();
 
-            var result = await _authService.SignInAsync(user, loginInputModel.Password);
+            var signInResult = await _authService.SignInAsync(user, loginInputModel.Password);
 
-            if (!result.Succeeded) ExceptionLogin();
+            if (!signInResult.Succeeded) ExceptionLogin();
 
-            return GenerateToken(user);
+            var roles = await _userService.GetRoleAsync(user);
+
+            return GenerateToken(user, roles);
         }
 
         private void ExceptionLogin() 

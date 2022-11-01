@@ -11,6 +11,7 @@ namespace PontoAll.Service.Repositories.Interfaces
     public interface IAuthRepository
     {
         Task<SignInResult> SignInAsync(ApplicationUser user, string password);
+
     }
 }
 

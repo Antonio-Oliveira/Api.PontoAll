@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PontoAll.Models.Dtos
 {
-    public class CollaboratorInputModel
+    public class CollaboratorViewModel
     {
         [Required]
         public int CPF { get; set; }
@@ -16,8 +16,8 @@ namespace PontoAll.Models.Dtos
         public DateTime BirthDate { get; set; }
 
         [Required]
-        public bool IsManager { get; set; }
+        public Guid AddressId { get; set; }
 
-        public virtual AddressInputModel Address { get; set; }
+        //public virtual Address Address { get; set; }
     }
 }

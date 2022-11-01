@@ -1,4 +1,5 @@
-﻿using PontoAll.Models.User;
+﻿using Microsoft.AspNetCore.Identity;
+using PontoAll.Models.User;
 using PontoAll.Service.Interfaces;
 using PontoAll.Service.Repositories.Interfaces;
 using System;
@@ -28,6 +29,13 @@ namespace PontoAll.Service
             var user = await _userRepository.FindUserByEmailAsync(email);
 
             return user;
+        }
+
+        public async Task<IList<string>> GetRoleAsync(ApplicationUser user)
+        {
+            var role = await _userRepository.GetRoleAsync(user);
+
+            return role;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PontoAll.Facade.Interfaces;
 using PontoAll.Models.Companys;
+using PontoAll.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

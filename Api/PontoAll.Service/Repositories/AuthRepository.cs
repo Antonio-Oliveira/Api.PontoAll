@@ -18,6 +18,7 @@ namespace PontoAll.Service.Repositories
             _signInManager = signInManager;
         }
 
+
         public async Task<SignInResult> SignInAsync(ApplicationUser user, string password)
         {
             var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);

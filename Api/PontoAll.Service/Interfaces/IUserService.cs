@@ -1,4 +1,5 @@
-﻿using PontoAll.Models.User;
+﻿using Microsoft.AspNetCore.Identity;
+using PontoAll.Models.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace PontoAll.Service.Interfaces
         Task RegisterAdminForCompany(ApplicationUser admin, string password);
 
         Task<ApplicationUser> FindUserByEmailAsync(string email);
+
+        Task<IList<string>> GetRoleAsync(ApplicationUser user);
     }
 }

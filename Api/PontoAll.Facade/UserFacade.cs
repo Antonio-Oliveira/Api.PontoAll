@@ -33,5 +33,11 @@ namespace PontoAll.Facade
 
             await _userService.RegisterAdminForCompany(admin, password);
         }
+
+        public Task<CollaboratorViewModel> RegisterCollaborador(CollaboratorInputModel collaboratorInputModel)
+        {
+
+            throw new NotImplementedException();
+        }
     }
 }

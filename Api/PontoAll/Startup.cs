@@ -139,10 +139,6 @@ namespace PontoAll
                 });
 
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PontoAll", Version = "v1" });
-
-                var basePath = AppDomain.CurrentDomain.BaseDirectory;
-                var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
-                c.IncludeXmlComments(Path.Combine(basePath, fileName));
             });
             #endregion
 
