@@ -56,9 +56,9 @@ namespace PontoAll.Facade
 
             var companyId = manager.CompanyId;
 
-            var username = CreateUsername(collaboratorInputModel.Name, collaboratorInputModel.CPF);
-
             var cleanCpf = ClearDocument(collaboratorInputModel.CPF);
+
+            var username = CreateUsername(collaboratorInputModel.Name, cleanCpf);
 
             var user = new CollaboratorUser()
             {
@@ -106,7 +106,9 @@ namespace PontoAll.Facade
         {
             var unicodeWhiteSpace = "\u0020";
 
-            var firstName = name.Trim().Substring(0, name.IndexOf(unicodeWhiteSpace));
+            var firtWhiteSpace = name.IndexOf(unicodeWhiteSpace) > 0 ? name.IndexOf(unicodeWhiteSpace) : name.Length;
+
+            var firstName = name.Trim().Substring(0, firtWhiteSpace);
 
             var firstDigitDocument = document.Substring(0, 3);
 
