@@ -10,7 +10,10 @@ namespace PontoAll.Models.User
     public class CollaboratorUser : ApplicationUser
     {
         [Required]
-        public int CPF { get; set; }
+        public string FullName { get; set; }
+
+        [Required]
+        public string CPF { get; set; }
 
         [Required]
         public DateTime BirthDate { get; set; }

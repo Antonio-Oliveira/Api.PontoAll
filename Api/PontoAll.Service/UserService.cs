@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using PontoAll.Models.Auth;
 using PontoAll.Models.User;
 using PontoAll.Service.Interfaces;
 using PontoAll.Service.Repositories.Interfaces;
@@ -21,7 +22,7 @@ namespace PontoAll.Service
 
         public async Task RegisterAdminForCompany(ApplicationUser admin, string password)
         {
-            await _userRepository.RegisterAdminForCompany(admin, password);
+            await _userRepository.RegisterAdminAsync(admin, password);
         }
 
         public async Task<ApplicationUser> FindUserByEmailAsync(string email)
@@ -36,6 +37,25 @@ namespace PontoAll.Service
             var role = await _userRepository.GetRoleAsync(user);
 
             return role;
+        }
+
+        public async Task<ApplicationUser> FindUserByCPFAsync(string cpf)
+        {
+            var user = await _userRepository.FindUserByCPFAsync(cpf);
+
+            return user;
+        }
+
+        public async Task RegisterCollaboratorAsync(CollaboratorUser user, string password, string role)
+        {
+            await _userRepository.RegisterCollaboratorAsync(user, password, role);
+        }
+
+        public async Task<Guid> RegisterAddressAsync(Address address)
+        {
+            var addressId = await _userRepository.RegisterAddressAsync(address);
+
+            return addressId;
         }
     }
 }

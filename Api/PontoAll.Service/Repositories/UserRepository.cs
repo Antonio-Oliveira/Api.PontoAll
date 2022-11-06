@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using PontoAll.Models.Auth;
 using PontoAll.Models.User;
 using PontoAll.Service.Data.Context;
 using PontoAll.Service.Repositories.Interfaces;
@@ -14,14 +15,18 @@ namespace PontoAll.Service.Repositories
     {
         private readonly AppDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserRepository(AppDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserRepository(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _roleManager = roleManager;
+        }
+
+        public Task<CollaboratorUser> FindUserByCPFAsync(string cpf)
+        {
+            var user = _context.Users.OfType<CollaboratorUser>().FirstOrDefault(u => u.CPF == cpf);
+
+            return Task.FromResult(user);
         }
 
         public async Task<ApplicationUser> FindUserByEmailAsync(string email)
@@ -38,15 +43,37 @@ namespace PontoAll.Service.Repositories
             return roles;
         }
 
-        public async Task RegisterAdminForCompany(ApplicationUser admin, string password)
+        public async Task<Guid> RegisterAddressAsync(Address address)
+        {
+            _context.Address.Add(address);
+
+            await _context.SaveChangesAsync();
+
+            return address.AddressId;
+        }
+
+        public async Task RegisterAdminAsync(ApplicationUser admin, string password)
         {
             var createAdmin = await _userManager.CreateAsync(admin, password);
 
+            var adminRole = RoleEnum.Admin.ToString();
+
             if (createAdmin.Succeeded)
             {
-                // Atribui o usuário ao perfil Admin
-                await _userManager.AddToRoleAsync(admin, "Admin");
+                await _userManager.AddToRoleAsync(admin, adminRole);
             }
+        }
+
+        public async Task RegisterCollaboratorAsync(CollaboratorUser collaborator, string password, string role)
+        {
+            var createAdmin = await _userManager.CreateAsync(collaborator, password);
+
+            if (!createAdmin.Succeeded)
+            {
+                throw new Exception("Erro ao criar usuário");
+            }
+
+            await _userManager.AddToRoleAsync(collaborator, role);
         }
     }
 }

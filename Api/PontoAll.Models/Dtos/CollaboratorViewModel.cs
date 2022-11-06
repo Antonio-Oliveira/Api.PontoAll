@@ -9,15 +9,16 @@ namespace PontoAll.Models.Dtos
 {
     public class CollaboratorViewModel
     {
-        [Required]
-        public int CPF { get; set; }
+        public string Name { get; set; }
 
-        [Required]
+        public string Email { get; set; }
+
+        public string CPF { get; set; }
+
+        public string PhoneNumber { get; set; }
+
         public DateTime BirthDate { get; set; }
 
-        [Required]
-        public Guid AddressId { get; set; }
-
-        //public virtual Address Address { get; set; }
+        public string Role { get; set; }
     }
 }

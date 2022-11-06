@@ -14,6 +14,10 @@ namespace PontoAll.Service.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<CollaboratorUser> builder)
         {
+            builder.Property(u => u.FullName)
+                .IsRequired()
+                .HasColumnName("FULL_NAME");
+
             builder.Property(u => u.CPF)
                .IsRequired()
                .HasMaxLength(Constants.CPF_LENGTH)

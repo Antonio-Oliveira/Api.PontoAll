@@ -6,6 +6,7 @@ using PontoAll.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PontoAll.Controllers
@@ -27,14 +28,14 @@ namespace PontoAll.Controllers
         {
             try
             {
-                //or if u want the list of claims
+                if (!ModelState.IsValid)
+                {
+                    throw new Exception("Informações inválidas");
+                }
+
                 var claims = User.Claims;
 
-                //string[] rolesuserbelongto = Roles.GetRolesForUser();
-
-                var collaborator = await _userFacade.RegisterCollaborador(collaboratorInputModel);
-
-
+                var collaborator = await _userFacade.RegisterCollaborador(collaboratorInputModel, claims);
 
                 return Created("", collaborator);
             }

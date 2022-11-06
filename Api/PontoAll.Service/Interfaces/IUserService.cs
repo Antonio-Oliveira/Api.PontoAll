@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using PontoAll.Models.Auth;
 using PontoAll.Models.User;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,11 @@ namespace PontoAll.Service.Interfaces
         Task<ApplicationUser> FindUserByEmailAsync(string email);
 
         Task<IList<string>> GetRoleAsync(ApplicationUser user);
+
+        Task<ApplicationUser> FindUserByCPFAsync(string cpf);
+
+        Task RegisterCollaboratorAsync(CollaboratorUser user, string password, string role);
+
+        Task<Guid> RegisterAddressAsync(Address address);
     }
 }

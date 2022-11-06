@@ -3,6 +3,7 @@ using PontoAll.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,6 @@ namespace PontoAll.Facade.Interfaces
     {
         Task RegisterAdminForCompany(CompanyInputModel companyInputModel, Guid companyId);
 
-        Task<CollaboratorViewModel> RegisterCollaborador(CollaboratorInputModel collaboratorInputModel);
+        Task<CollaboratorViewModel> RegisterCollaborador(CollaboratorInputModel collaboratorInputModel, IEnumerable<Claim> claims);
     }
 }
