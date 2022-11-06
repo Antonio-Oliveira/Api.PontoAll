@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PontoAll.Facade
@@ -30,9 +31,11 @@ namespace PontoAll.Facade
                 throw new Exception(Constants.ERRO_COMPANY_DATA_EXISTS);
             }
 
+            var cleanCNPJ = ClearDocument(companyInputModel.CNPJ);
+
             var company = new Company()
             {
-                CNPJ = companyInputModel.CNPJ,
+                CNPJ = cleanCNPJ,
                 CorporateName = companyInputModel.CorporateName,
                 FantasyName = companyInputModel.FantasyName,
                 Email = companyInputModel.Email,
@@ -43,6 +46,19 @@ namespace PontoAll.Facade
             var companyId = await _companyService.RegisterCompany(company);
 
             return companyId;
+        }
+
+        private string ClearDocument(string document)
+        {
+            string pattern = @"(?i)[\-*\.*\\*\/*\s*]";
+
+            string replacement = string.Empty;
+
+            Regex rgx = new Regex(pattern);
+
+            string cleanDocument = rgx.Replace(document, replacement);
+
+            return cleanDocument;
         }
     }
 }

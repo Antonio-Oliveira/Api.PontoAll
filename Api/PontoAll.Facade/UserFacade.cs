@@ -62,11 +62,11 @@ namespace PontoAll.Facade
 
             var user = new CollaboratorUser()
             {
-                CPF = collaboratorInputModel.CPF,
                 BirthDate = collaboratorInputModel.BirthDate,
                 Email = collaboratorInputModel.Email,
                 PhoneNumber = collaboratorInputModel.PhoneNumber,
                 FullName = collaboratorInputModel.Name,
+                CPF = cleanCpf,
                 UserName = username,
                 AddressId = addressId,
                 CompanyId = companyId
