@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PontoAll.Service.Data.Migrations
 {
-    public partial class ADD_COMPANY_USERS_ENDERECO : Migration
+    public partial class CREATED_TABLES : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,6 +57,27 @@ namespace PontoAll.Service.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "POINT",
+                columns: table => new
+                {
+                    DATE_POINT = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    POINT_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    USER_PHOTOGRAPH = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TYPE_POINT = table.Column<int>(type: "int", nullable: false),
+                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_POINT", x => x.DATE_POINT);
+                    table.ForeignKey(
+                        name: "FK_POINT_ADDRESS_ID",
+                        column: x => x.AddressId,
+                        principalTable: "ADDRESS",
+                        principalColumn: "ADDRESS_ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -84,7 +105,8 @@ namespace PontoAll.Service.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CPF = table.Column<int>(type: "int", fixedLength: true, maxLength: 11, nullable: true),
+                    FULL_NAME = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CPF = table.Column<string>(type: "nchar(11)", fixedLength: true, maxLength: 11, nullable: true),
                     BIRTHDATE = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -252,6 +274,11 @@ namespace PontoAll.Service.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_POINT_AddressId",
+                table: "POINT",
+                column: "AddressId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -270,6 +297,9 @@ namespace PontoAll.Service.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "POINT");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

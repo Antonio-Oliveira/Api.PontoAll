@@ -45,7 +45,7 @@ namespace PontoAll.Service.Repositories
 
         public async Task<Guid> RegisterAddressAsync(Address address)
         {
-            _context.Address.Add(address);
+            //_context.Address.Add(address);
 
             await _context.SaveChangesAsync();
 

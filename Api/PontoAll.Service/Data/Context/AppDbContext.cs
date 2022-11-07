@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PontoAll.Models.Companys;
+using PontoAll.Models.Points;
 using PontoAll.Models.User;
 using PontoAll.Service.Data.Mappings;
 using System;
@@ -21,6 +22,7 @@ namespace PontoAll.Service.Data.Context
             modelBuilder.ApplyConfiguration(new ApplicationUserMapping());
             modelBuilder.ApplyConfiguration(new CollaboratorUserMapping());
             modelBuilder.ApplyConfiguration(new AddressMapping());
+            modelBuilder.ApplyConfiguration(new PointMapping());
             base.OnModelCreating(modelBuilder);
         }
 
@@ -28,6 +30,7 @@ namespace PontoAll.Service.Data.Context
 
         public DbSet<Company> Companies { get; set; }
 
+        public DbSet<Point> Points { get; set; }
     }
 
 }

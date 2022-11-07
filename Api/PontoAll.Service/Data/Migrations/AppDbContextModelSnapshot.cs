@@ -191,6 +191,35 @@ namespace PontoAll.Service.Data.Migrations
                     b.ToTable("COMPANY");
                 });
 
+            modelBuilder.Entity("PontoAll.Models.Points.Point", b =>
+                {
+                    b.Property<DateTime>("DatePoint")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DATE_POINT");
+
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PointId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("POINT_ID");
+
+                    b.Property<int>("TypePoint")
+                        .HasColumnType("int")
+                        .HasColumnName("TYPE_POINT");
+
+                    b.Property<string>("UserPhotograph")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("USER_PHOTOGRAPH");
+
+                    b.HasKey("DatePoint");
+
+                    b.HasIndex("AddressId");
+
+                    b.ToTable("POINT");
+                });
+
             modelBuilder.Entity("PontoAll.Models.User.Address", b =>
                 {
                     b.Property<Guid>("AddressId")
@@ -397,6 +426,18 @@ namespace PontoAll.Service.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PontoAll.Models.Points.Point", b =>
+                {
+                    b.HasOne("PontoAll.Models.User.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .HasConstraintName("FK_POINT_ADDRESS_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("PontoAll.Models.User.ApplicationUser", b =>

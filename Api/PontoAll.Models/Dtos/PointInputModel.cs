@@ -11,16 +11,12 @@ namespace PontoAll.Models.Dtos
     public class PointInputModel
     {
         [Required]
-        public IFormFile Image { get; set; }
+        public IFormFile UserPhotograph { get; set; }
 
         [Required]
         public DateTime DatePoint { get; set; }
 
         [Required]
         public AddressInputModel Address { get; set; }
-
-        [Required]
-        public GeolocationInputModel Geolocation { get; set; }
-
     }
 }
