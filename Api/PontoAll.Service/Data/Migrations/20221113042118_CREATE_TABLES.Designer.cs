@@ -10,7 +10,7 @@ using PontoAll.Service.Data.Context;
 namespace PontoAll.Service.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221108230845_CREATE_TABLES")]
+    [Migration("20221113042118_CREATE_TABLES")]
     partial class CREATE_TABLES
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
