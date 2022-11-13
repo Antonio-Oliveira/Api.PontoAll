@@ -22,5 +22,7 @@ namespace PontoAll.Service.Repositories.Interfaces
         Task<CollaboratorUser> FindUserByCPFAsync(string cpf);
 
         Task<Guid> RegisterAddressAsync(Address address);
+
+        Task<List<CollaboratorUser>> GetUserByCompanyIdAsync(Guid companyId);
     }
 }

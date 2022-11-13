@@ -57,5 +57,12 @@ namespace PontoAll.Service
 
             return addressId;
         }
+
+        public async Task<List<CollaboratorUser>> GetUserByCompanyIdAsync(Guid companyId)
+        {
+            var collaborators = await _userRepository.GetUserByCompanyIdAsync(companyId);
+
+            return collaborators;
+        }
     }
 }

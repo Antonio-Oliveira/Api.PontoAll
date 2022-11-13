@@ -1,14 +1,18 @@
-﻿using System;
+﻿using PontoAll.Models.User;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PontoAll.Models.Dtos
+namespace PontoAll.Models.Points
 {
-    public class AddressInputModel
+    public class AddressPoint 
     {
+        [Required]
+        public Guid AddressPointId { get; set; }
+
         [Required]
         public string Country { get; set; }
 
@@ -16,7 +20,6 @@ namespace PontoAll.Models.Dtos
         public string State { get; set; }
 
         [Required]
-        [RegularExpression(@"^[0-9]{5}\-?[0-9]{3}$")]
         public string CEP { get; set; }
 
         [Required]

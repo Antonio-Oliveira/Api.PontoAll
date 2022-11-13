@@ -149,14 +149,16 @@ namespace PontoAll
         {
             services.AddScoped<ICompanyFacade, CompanyFacade>()
                     .AddScoped<IUserFacade, UserFacade>()
-                    .AddScoped<IAuthFacade, AuthFacade>();
+                    .AddScoped<IAuthFacade, AuthFacade>()
+                    .AddScoped<IPointFacade, PointFacade>();
         }
 
         private void AddRepositories(IServiceCollection services)
         {
             services.AddScoped<ICompanyRepository, CompanyRepository>()
                     .AddScoped<IUserRepository, UserRepository>()
-                    .AddScoped<IAuthRepository, AuthRepository>();
+                    .AddScoped<IAuthRepository, AuthRepository>()
+                    .AddScoped<IPointRepository, PointRepository>();
                     
         }
 
@@ -164,7 +166,8 @@ namespace PontoAll
         {
             services.AddScoped<ICompanyService, CompanyService>()
                     .AddScoped<IUserService, UserService>()
-                    .AddScoped<IAuthService, AuthService>();
+                    .AddScoped<IAuthService, AuthService>()
+                    .AddScoped<IPointService, PointService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

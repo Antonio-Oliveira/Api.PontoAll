@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PontoAll.Service.Data.Migrations
 {
-    public partial class CREATED_TABLES : Migration
+    public partial class CREATE_TABLES : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,6 +24,25 @@ namespace PontoAll.Service.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ADDRESS", x => x.ADDRESS_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ADDRESS_POINT",
+                columns: table => new
+                {
+                    ADDRESS_POINT_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    COUNTRY = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    STATE = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CEP = table.Column<string>(type: "nchar(8)", fixedLength: true, maxLength: 8, nullable: false),
+                    CITY = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    STREET = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DISTRICT = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NUMBER = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    REFERENCE = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ADDRESS_POINT", x => x.ADDRESS_POINT_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,27 +73,6 @@ namespace PontoAll.Service.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_COMPANY", x => x.COMPANY_ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "POINT",
-                columns: table => new
-                {
-                    DATE_POINT = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    POINT_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    USER_PHOTOGRAPH = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TYPE_POINT = table.Column<int>(type: "int", nullable: false),
-                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_POINT", x => x.DATE_POINT);
-                    table.ForeignKey(
-                        name: "FK_POINT_ADDRESS_ID",
-                        column: x => x.AddressId,
-                        principalTable: "ADDRESS",
-                        principalColumn: "ADDRESS_ID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,6 +224,34 @@ namespace PontoAll.Service.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "POINT",
+                columns: table => new
+                {
+                    DATE_POINT = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    POINT_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    USER_PHOTOGRAPH = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TYPE_POINT = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AddressPointId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_POINT", x => x.DATE_POINT);
+                    table.ForeignKey(
+                        name: "FK_POINT_ADDRESS_ID",
+                        column: x => x.AddressPointId,
+                        principalTable: "ADDRESS_POINT",
+                        principalColumn: "ADDRESS_POINT_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_USER_ID",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -276,9 +302,14 @@ namespace PontoAll.Service.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_POINT_AddressId",
+                name: "IX_POINT_AddressPointId",
                 table: "POINT",
-                column: "AddressId");
+                column: "AddressPointId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_POINT_UserId",
+                table: "POINT",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -303,6 +334,9 @@ namespace PontoAll.Service.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "ADDRESS_POINT");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

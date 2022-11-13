@@ -35,7 +35,7 @@ namespace PontoAll.Controllers
                 }
 
                 var companyId = await _companyFacade.RegisterCompany(companyInputModel);
-                await _userFacade.RegisterAdminForCompany(companyInputModel, companyId);
+                await _userFacade.RegisterAdminForCompanyAsync(companyInputModel, companyId);
 
                 return Ok();
             }

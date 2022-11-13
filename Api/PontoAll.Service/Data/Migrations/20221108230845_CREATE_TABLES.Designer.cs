@@ -10,8 +10,8 @@ using PontoAll.Service.Data.Context;
 namespace PontoAll.Service.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221107011035_CREATED_TABLES")]
-    partial class CREATED_TABLES
+    [Migration("20221108230845_CREATE_TABLES")]
+    partial class CREATE_TABLES
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -193,13 +193,66 @@ namespace PontoAll.Service.Data.Migrations
                     b.ToTable("COMPANY");
                 });
 
+            modelBuilder.Entity("PontoAll.Models.Points.AddressPoint", b =>
+                {
+                    b.Property<Guid>("AddressPointId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ADDRESS_POINT_ID");
+
+                    b.Property<string>("CEP")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nchar(8)")
+                        .HasColumnName("CEP")
+                        .IsFixedLength(true);
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CITY");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("COUNTRY");
+
+                    b.Property<string>("District")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DISTRICT");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NUMBER");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("REFERENCE");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("STATE");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("STREET");
+
+                    b.HasKey("AddressPointId");
+
+                    b.ToTable("ADDRESS_POINT");
+                });
+
             modelBuilder.Entity("PontoAll.Models.Points.Point", b =>
                 {
                     b.Property<DateTime>("DatePoint")
                         .HasColumnType("datetime2")
                         .HasColumnName("DATE_POINT");
 
-                    b.Property<Guid>("AddressId")
+                    b.Property<Guid>("AddressPointId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PointId")
@@ -210,6 +263,10 @@ namespace PontoAll.Service.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("TYPE_POINT");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("UserPhotograph")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -217,7 +274,9 @@ namespace PontoAll.Service.Data.Migrations
 
                     b.HasKey("DatePoint");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressPointId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("POINT");
                 });
@@ -432,14 +491,23 @@ namespace PontoAll.Service.Data.Migrations
 
             modelBuilder.Entity("PontoAll.Models.Points.Point", b =>
                 {
-                    b.HasOne("PontoAll.Models.User.Address", "Address")
+                    b.HasOne("PontoAll.Models.Points.AddressPoint", "AddressPoint")
                         .WithMany()
-                        .HasForeignKey("AddressId")
+                        .HasForeignKey("AddressPointId")
                         .HasConstraintName("FK_POINT_ADDRESS_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Address");
+                    b.HasOne("PontoAll.Models.User.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_USER_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddressPoint");
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("PontoAll.Models.User.ApplicationUser", b =>

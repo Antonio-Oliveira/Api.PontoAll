@@ -13,7 +13,7 @@ namespace PontoAll.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Manager")]
     public class UserController : ControllerBase
     {
         private readonly IUserFacade _userFacade;
@@ -35,13 +35,30 @@ namespace PontoAll.Controllers
 
                 var claims = User.Claims;
 
-                var collaborator = await _userFacade.RegisterCollaborador(collaboratorInputModel, claims);
+                var collaborator = await _userFacade.RegisterCollaboradorAsync(collaboratorInputModel, claims);
 
                 return Created("", collaborator);
             }
             catch (Exception err)
             {
                 return NotFound(err.Message);
+            }
+        }
+
+        [HttpGet("GetCollaborator")]
+        public async Task<ActionResult<CollaboratorViewModel>> GetCollaborator()
+        {
+            try
+            {
+                var claims = User.Claims;
+
+                var collaborators = await _userFacade.GetCollaboradorAsync(claims);
+
+                return Ok(collaborators);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
             }
         }
 

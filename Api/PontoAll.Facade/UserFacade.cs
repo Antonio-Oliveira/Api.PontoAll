@@ -24,8 +24,10 @@ namespace PontoAll.Facade
             _userService = userService;
         }
 
-        public async Task RegisterAdminForCompany(CompanyInputModel companyInputModel, Guid companyId)
+        public async Task RegisterAdminForCompanyAsync(CompanyInputModel companyInputModel, Guid companyId)
         {
+            var username = CreateUsername(companyInputModel.FantasyName, companyInputModel.CNPJ);
+
             var admin = new ApplicationUser()
             {
                 Email = companyInputModel.Email,
@@ -38,7 +40,7 @@ namespace PontoAll.Facade
             await _userService.RegisterAdminForCompany(admin, password);
         }
 
-        public async Task<CollaboratorViewModel> RegisterCollaborador(CollaboratorInputModel collaboratorInputModel, IEnumerable<Claim> claims)
+        public async Task<CollaboratorViewModel> RegisterCollaboradorAsync(CollaboratorInputModel collaboratorInputModel, IEnumerable<Claim> claims)
         {
             var manager = await FindManagerAsync(claims);
 
@@ -117,7 +119,6 @@ namespace PontoAll.Facade
             return username;
         }
 
-
         private string GeneratePasswordDefault(CollaboratorInputModel collaboratorInputModel)
         {
             var userName = collaboratorInputModel.Name;
@@ -158,6 +159,32 @@ namespace PontoAll.Facade
             var addressId = await _userService.RegisterAddressAsync(address);
 
             return addressId;
+        }
+
+        public async Task<List<CollaboratorViewModel>> GetCollaboradorAsync(IEnumerable<Claim> claims)
+        {
+            var manager = await FindManagerAsync(claims);
+
+            if (manager == null) throw new Exception("Erro ao procurar manager");
+
+            var usersByCompany = await _userService.GetUserByCompanyIdAsync(manager.CompanyId);
+
+            return usersByCompany.Select(user => new CollaboratorViewModel()
+            {
+                BirthDate = user.BirthDate,
+                CPF = user.CPF,
+                Email = user.Email,
+                Name = user.FullName,
+                PhoneNumber = user.PhoneNumber,
+                Role = GetUserRole(user).Result
+            }).ToList();
+        }
+
+        private async Task<string> GetUserRole(ApplicationUser user)
+        {
+            var roles = await _userService.GetRoleAsync(user);
+
+            return roles[0];
         }
     }
 }

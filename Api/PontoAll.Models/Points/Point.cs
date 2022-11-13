@@ -23,8 +23,14 @@ namespace PontoAll.Models.Points
         public TypePointEnum TypePoint { get; set; }
 
         [Required]
-        public Guid AddressId { get; set; }
+        public string UserId { get; set; }
 
-        public virtual Address Address { get; set; }
+        [Required]
+        public Guid AddressPointId { get; set; }
+
+        public virtual AddressPoint AddressPoint { get; set; }
+
+        public virtual ApplicationUser ApplicationUser { get; set; }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PontoAll.Facade.Interfaces;
 using PontoAll.Models.Dtos;
 using System;
@@ -24,7 +25,7 @@ namespace PontoAll.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<PointViewModel>> RegisterPoint(PointInputModel pointInputModel) 
+        public async Task<ActionResult<PointViewModel>> RegisterPoint(IFormFile photo, [FromForm] string jsonData)
         {
             try
             {
@@ -33,16 +34,40 @@ namespace PontoAll.Controllers
                     throw new Exception("Informações inválidas");
                 }
 
+                var pointInputModel = JsonConvert.DeserializeObject<PointInputModel>(jsonData);
+
+                pointInputModel.UserPhotograph = photo;
+
                 var claims = User.Claims;
 
-                var point = _pointFacade.RegisterPointAsync(pointInputModel, claims);
+                var point = await _pointFacade.RegisterPointAsync(pointInputModel, claims);
 
-                return Created("", null);
+                return Created("", point);
             }
             catch (Exception err)
             {
                 return BadRequest(err.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<PointViewModel>> GetCurrentPoint()
+        {
+            try
+            {
+                var claims = User.Claims;
+
+                var point = await _pointFacade.GetCurrentPointAsync(claims);
+
+                return Ok(point);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
+
+
     }
 }

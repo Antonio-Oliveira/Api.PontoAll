@@ -11,8 +11,10 @@ namespace PontoAll.Facade.Interfaces
 {
     public interface IUserFacade
     {
-        Task RegisterAdminForCompany(CompanyInputModel companyInputModel, Guid companyId);
+        Task RegisterAdminForCompanyAsync(CompanyInputModel companyInputModel, Guid companyId);
 
-        Task<CollaboratorViewModel> RegisterCollaborador(CollaboratorInputModel collaboratorInputModel, IEnumerable<Claim> claims);
+        Task<CollaboratorViewModel> RegisterCollaboradorAsync(CollaboratorInputModel collaboratorInputModel, IEnumerable<Claim> claims);
+
+        Task<List<CollaboratorViewModel>> GetCollaboradorAsync(IEnumerable<Claim> claims);
     }
 }

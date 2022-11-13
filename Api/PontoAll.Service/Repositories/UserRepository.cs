@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PontoAll.Models.Auth;
 using PontoAll.Models.User;
 using PontoAll.Service.Data.Context;
@@ -43,9 +44,16 @@ namespace PontoAll.Service.Repositories
             return roles;
         }
 
+        public Task<List<CollaboratorUser>> GetUserByCompanyIdAsync(Guid companyId)
+        {
+            var collaborators = _context.Users.OfType<CollaboratorUser>().Where(u => u.CompanyId == companyId).ToListAsync();
+
+            return collaborators;
+        }
+
         public async Task<Guid> RegisterAddressAsync(Address address)
         {
-            //_context.Address.Add(address);
+            _context.Address.Add(address);
 
             await _context.SaveChangesAsync();
 

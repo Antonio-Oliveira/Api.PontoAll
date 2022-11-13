@@ -22,5 +22,7 @@ namespace PontoAll.Service.Interfaces
         Task RegisterCollaboratorAsync(CollaboratorUser user, string password, string role);
 
         Task<Guid> RegisterAddressAsync(Address address);
+
+        Task<List<CollaboratorUser>> GetUserByCompanyIdAsync(Guid companyId);
     }
 }

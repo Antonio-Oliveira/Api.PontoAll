@@ -11,5 +11,7 @@ namespace PontoAll.Facade.Interfaces
     public interface IPointFacade
     {
         Task<PointViewModel> RegisterPointAsync(PointInputModel pointInputModel, IEnumerable<Claim> claims);
+
+        Task<PointViewModel> GetCurrentPointAsync(IEnumerable<Claim> claims);
     }
 }

@@ -34,9 +34,14 @@ namespace PontoAll.Service.Data.Mappings
                 .IsRequired()
                 .HasColumnName("DATE_POINT");
 
-            builder.HasOne(p => p.Address)
+            builder.HasOne(p => p.ApplicationUser)
                 .WithMany()
-                .HasForeignKey(fk => fk.AddressId)
+                .HasForeignKey(fk => fk.UserId)
+                .HasConstraintName("FK_USER_ID");
+
+            builder.HasOne(p => p.AddressPoint)
+                .WithMany()
+                .HasForeignKey(fk => fk.AddressPointId)
                 .HasConstraintName("FK_POINT_ADDRESS_ID");
         }
     }

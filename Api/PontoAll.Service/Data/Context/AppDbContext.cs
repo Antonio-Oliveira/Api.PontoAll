@@ -6,6 +6,7 @@ using PontoAll.Models.User;
 using PontoAll.Service.Data.Mappings;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace PontoAll.Service.Data.Context
             modelBuilder.ApplyConfiguration(new CollaboratorUserMapping());
             modelBuilder.ApplyConfiguration(new AddressMapping());
             modelBuilder.ApplyConfiguration(new PointMapping());
+            modelBuilder.ApplyConfiguration(new AddressPointMapping());
             base.OnModelCreating(modelBuilder);
         }
 
@@ -31,6 +33,7 @@ namespace PontoAll.Service.Data.Context
         public DbSet<Company> Companies { get; set; }
 
         public DbSet<Point> Points { get; set; }
-    }
 
+        public DbSet<AddressPoint> AddressPoint { get; set; }
+    }
 }
