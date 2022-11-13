@@ -18,9 +18,18 @@ namespace PontoAll.Service
             _pointRepository = pointRepository;
         }
 
-        public async Task<Point> GetCurrentPointAsync(DateTime dateNow)
+        public async Task<Point> GetCurrentPointAsync(DateTime dateNow, string userId)
         {
-            throw new Exception("");
+            var point = await _pointRepository.GetCurrentPointAsync(dateNow, userId);
+
+            return point;
+        }
+
+        public async Task<List<Point>> GetPointsAsync(string userId)
+        {
+            var points = await _pointRepository.GetPointsAsync(userId);
+
+            return points;
         }
 
         public async Task<Guid> RegisterAddressPointAsync(AddressPoint addressPoint)

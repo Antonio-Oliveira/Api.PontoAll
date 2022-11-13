@@ -139,9 +139,11 @@ namespace PontoAll.Facade
 
             var user = await _userService.FindUserByEmailAsync(emailManager);
 
-            if (emailManager == null) throw new Exception("Erro ao procurar usuário");
+            if (user == null) throw new Exception("Erro ao procurar usuário");
 
-            var currentPoint = await _pointService.GetCurrentPointAsync(dateNow);
+            var currentPoint = await _pointService.GetCurrentPointAsync(dateNow, user.Id);
+
+            if (currentPoint == null) return null;
 
             var pointViewModel = new PointViewModel()
             {
@@ -153,5 +155,24 @@ namespace PontoAll.Facade
         }
 
         private string GetEmailByClaim(IEnumerable<Claim> claims) => claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
+
+        public async Task<List<PointViewModel>> GetPointsAsync(IEnumerable<Claim> claims)
+        {
+            var emailManager = GetEmailByClaim(claims);
+
+            if (emailManager == null) throw new Exception("Erro ao procurar usuário");
+
+            var user = await _userService.FindUserByEmailAsync(emailManager);
+
+            if (user == null) throw new Exception("Erro ao procurar usuário");
+
+            var points = await _pointService.GetPointsAsync(user.Id);
+
+            return points.Select(point => new PointViewModel() 
+            {
+                DatePoint = point.DatePoint,
+                TypePoint = point.TypePoint.ToString()
+            }).ToList();
+        }
     }
 }

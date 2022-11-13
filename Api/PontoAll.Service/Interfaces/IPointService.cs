@@ -1,4 +1,5 @@
 ﻿using PontoAll.Models.Points;
+using PontoAll.Models.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace PontoAll.Service.Interfaces
 
         Task<Guid> RegisterAddressPointAsync(AddressPoint addressPoint);
 
-        Task<Point> GetCurrentPointAsync(DateTime dateNow);
+        Task<Point> GetCurrentPointAsync(DateTime dateNow, string userId);
+
+        Task<List<Point>> GetPointsAsync(string userId);
     }
 }

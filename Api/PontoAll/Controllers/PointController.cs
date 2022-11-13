@@ -24,7 +24,7 @@ namespace PontoAll.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("RegisterPoint")]
         public async Task<ActionResult<PointViewModel>> RegisterPoint(IFormFile photo, [FromForm] string jsonData)
         {
             try
@@ -50,7 +50,7 @@ namespace PontoAll.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("GetCurrentPoint")]
         public async Task<ActionResult<PointViewModel>> GetCurrentPoint()
         {
             try
@@ -67,6 +67,39 @@ namespace PontoAll.Controllers
             }
         }
 
+        [HttpGet("GetPoints")]
+        public async Task<ActionResult<List<PointViewModel>>> GetPoints()
+        {
+            try
+            {
+                var claims = User.Claims;
+
+                var point = await _pointFacade.GetPointsAsync(claims);
+
+                return Ok(point);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
+        [HttpGet("GetCollaboratorPoint")]
+        public async Task<ActionResult<List<PointViewModel>>> GetCollaboratorPoint()
+        {
+            try
+            {
+                var claims = User.Claims;
+
+                var point = await _pointFacade.GetPointsAsync(claims);
+
+                return Ok(point);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
 
 
     }

@@ -1,4 +1,5 @@
 ﻿using PontoAll.Models.Dtos;
+using PontoAll.Models.Points;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace PontoAll.Facade.Interfaces
         Task<PointViewModel> RegisterPointAsync(PointInputModel pointInputModel, IEnumerable<Claim> claims);
 
         Task<PointViewModel> GetCurrentPointAsync(IEnumerable<Claim> claims);
+
+        Task<List<PointViewModel>> GetPointsAsync(IEnumerable<Claim> claims);
     }
 }

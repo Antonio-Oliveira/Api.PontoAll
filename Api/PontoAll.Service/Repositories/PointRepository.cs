@@ -19,6 +19,20 @@ namespace PontoAll.Service.Repositories
             _context = context;
         }
 
+        public async Task<Point> GetCurrentPointAsync(DateTime dateNow, string userId)
+        {
+            var point = await _context.Points.Where(p => p.UserId == userId && p.DatePoint.Date == dateNow.Date).OrderByDescending(p => p.DatePoint).FirstOrDefaultAsync();
+
+            return point;
+        }
+
+        public async Task<List<Point>> GetPointsAsync(string userId)
+        {
+            var points = await _context.Points.Where(p => p.UserId == userId).OrderByDescending(p => p.DatePoint).ToListAsync();
+
+            return points;
+        }
+
         public async Task<Guid> RegisterAddressPointAsync(AddressPoint addressPoint)
         {
             var result = _context.AddressPoint.Add(addressPoint);
