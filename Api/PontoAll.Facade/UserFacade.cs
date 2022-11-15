@@ -13,6 +13,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+/// <summary>
+/// teste
+/// </summary>
 namespace PontoAll.Facade
 {
     public class UserFacade : IUserFacade
