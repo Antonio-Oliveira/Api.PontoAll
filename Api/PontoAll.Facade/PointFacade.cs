@@ -156,7 +156,7 @@ namespace PontoAll.Facade
 
         private string GetEmailByClaim(IEnumerable<Claim> claims) => claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
 
-        public async Task<List<PointViewModel>> GetPointsAsync(IEnumerable<Claim> claims)
+        public async Task<UserPointViewModel> GetPointsAsync(IEnumerable<Claim> claims)
         {
             var emailManager = GetEmailByClaim(claims);
 
@@ -168,22 +168,73 @@ namespace PontoAll.Facade
 
             var points = await _pointService.GetPointsAsync(user.Id);
 
-            return points.Select(point => new PointViewModel() 
+            var pointsViewModel = points.Select(point => new PointViewModel() 
             {
                 DatePoint = point.DatePoint,
                 TypePoint = point.TypePoint.ToString()
             }).ToList();
+
+            var overtime = CalculateOvertimeAsync(points);
+
+            return new UserPointViewModel()
+            {
+                Overtime = overtime,
+                Points = pointsViewModel
+            };
         }
 
-        public async Task<List<PointViewModel>> GetCollaboratorPointsAsync(string collaboratorEmail)
+        public async Task<UserPointViewModel> GetCollaboratorPointsAsync(string collaboratorEmail)
         {
             var points = await _pointService.GetCollaboratorPointsAsync(collaboratorEmail);
 
-            return points.Select(point => new PointViewModel()
+            var overtimeUser = CalculateOvertimeAsync(points);
+
+            var pointsViewModel = points.Select(point => new PointViewModel()
             {
                 DatePoint = point.DatePoint,
                 TypePoint = point.TypePoint.ToString()
             }).ToList();
+
+            return new UserPointViewModel()
+            {
+                Overtime = overtimeUser,
+                Points = pointsViewModel
+            };
+        }
+
+        private string CalculateOvertimeAsync(List<Point> points)
+        {
+            if (points.Count is default(int)) return "00:00";
+
+            var listParPoints = points.Where(p => p.DatePoint < DateTime.Now.Date).GroupBy(p => p.DatePoint.Date).ToList();
+
+            double sumOvertime = 0;
+
+            for (int i = 0; i < listParPoints.Count(); i++)
+            {
+                var parPoints = listParPoints[i].ToList();
+
+                double sumParPoints = 0;
+
+                if (parPoints.Count > default(int)) 
+                {
+                    for (int j = 0; j < listParPoints[i].Count(); j += 2)
+                    {
+                        sumParPoints += parPoints[j].DatePoint.Subtract(parPoints[j + 1].DatePoint).TotalHours;
+                    }
+
+                    sumOvertime += sumParPoints - 8;
+                }
+            }
+
+            var overtimeSpan = TimeSpan.FromHours(sumOvertime);
+
+            string overtimeHours = "00";
+            string overtimeMinutes = "00";
+
+            var overtime = $"00:00";
+
+            return overtime;
         }
     }
 }

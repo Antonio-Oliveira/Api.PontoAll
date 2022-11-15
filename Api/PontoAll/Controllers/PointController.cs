@@ -69,7 +69,7 @@ namespace PontoAll.Controllers
         }
 
         [HttpGet("GetPoints")]
-        public async Task<ActionResult<List<PointViewModel>>> GetPoints()
+        public async Task<ActionResult<UserPointViewModel>> GetPoints()
         {
             try
             {
@@ -87,12 +87,10 @@ namespace PontoAll.Controllers
 
         [Authorize(Roles = "Admin, Manager")]
         [HttpGet("GetCollaboratorPoints")]
-        public async Task<ActionResult<List<PointViewModel>>> GetCollaboratorPoint([FromQuery][EmailAddress(ErrorMessage = "O campo {0} está em formato inválido")] string collaboratorEmail)
+        public async Task<ActionResult<UserPointViewModel>> GetCollaboratorPoint([FromQuery][EmailAddress(ErrorMessage = "O campo {0} está em formato inválido")] string collaboratorEmail)
         {
             try
             {
-                var claims = User.Claims;
-
                 var collaboratorPoints = await _pointFacade.GetCollaboratorPointsAsync(collaboratorEmail);
 
                 return Ok(collaboratorPoints);
