@@ -143,10 +143,13 @@ namespace PontoAll.Facade
 
         private async Task<Guid> CreateAddressAsync(AddressInputModel addressInputModel)
         {
+
+            var cleanedCEP = ClearDocument(addressInputModel.CEP);
+
             var address = new Address()
             {
                 AddressId = Guid.NewGuid(),
-                CEP = addressInputModel.CEP,
+                CEP = cleanedCEP,
                 City = addressInputModel.City,
                 Country = addressInputModel.Country,
                 District = addressInputModel.District,
