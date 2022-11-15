@@ -19,5 +19,7 @@ namespace PontoAll.Service.Interfaces
         Task<Point> GetCurrentPointAsync(DateTime dateNow, string userId);
 
         Task<List<Point>> GetPointsAsync(string userId);
+
+        Task<List<Point>> GetCollaboratorPointsAsync(string collaboratorEmail);
     }
 }

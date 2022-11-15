@@ -174,5 +174,16 @@ namespace PontoAll.Facade
                 TypePoint = point.TypePoint.ToString()
             }).ToList();
         }
+
+        public async Task<List<PointViewModel>> GetCollaboratorPointsAsync(string collaboratorEmail)
+        {
+            var points = await _pointService.GetCollaboratorPointsAsync(collaboratorEmail);
+
+            return points.Select(point => new PointViewModel()
+            {
+                DatePoint = point.DatePoint,
+                TypePoint = point.TypePoint.ToString()
+            }).ToList();
+        }
     }
 }

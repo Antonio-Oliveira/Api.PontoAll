@@ -16,5 +16,7 @@ namespace PontoAll.Facade.Interfaces
         Task<PointViewModel> GetCurrentPointAsync(IEnumerable<Claim> claims);
 
         Task<List<PointViewModel>> GetPointsAsync(IEnumerable<Claim> claims);
+
+        Task<List<PointViewModel>> GetCollaboratorPointsAsync(string collaboratorEmail);
     }
 }

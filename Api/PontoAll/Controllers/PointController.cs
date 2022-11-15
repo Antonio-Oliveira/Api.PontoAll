@@ -6,6 +6,7 @@ using PontoAll.Facade.Interfaces;
 using PontoAll.Models.Dtos;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -84,16 +85,17 @@ namespace PontoAll.Controllers
             }
         }
 
-        [HttpGet("GetCollaboratorPoint")]
-        public async Task<ActionResult<List<PointViewModel>>> GetCollaboratorPoint()
+        [Authorize(Roles = "Admin, Manager")]
+        [HttpGet("GetCollaboratorPoints")]
+        public async Task<ActionResult<List<PointViewModel>>> GetCollaboratorPoint([FromQuery][EmailAddress(ErrorMessage = "O campo {0} está em formato inválido")] string collaboratorEmail)
         {
             try
             {
                 var claims = User.Claims;
 
-                var point = await _pointFacade.GetPointsAsync(claims);
+                var collaboratorPoints = await _pointFacade.GetCollaboratorPointsAsync(collaboratorEmail);
 
-                return Ok(point);
+                return Ok(collaboratorPoints);
             }
             catch (Exception err)
             {

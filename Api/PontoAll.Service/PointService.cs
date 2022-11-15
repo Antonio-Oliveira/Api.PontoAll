@@ -18,6 +18,13 @@ namespace PontoAll.Service
             _pointRepository = pointRepository;
         }
 
+        public async Task<List<Point>> GetCollaboratorPointsAsync(string collaboratorEmail)
+        {
+            var points = await _pointRepository.GetCollaboratorPointsAsync(collaboratorEmail);
+
+            return points;
+        }
+
         public async Task<Point> GetCurrentPointAsync(DateTime dateNow, string userId)
         {
             var point = await _pointRepository.GetCurrentPointAsync(dateNow, userId);
