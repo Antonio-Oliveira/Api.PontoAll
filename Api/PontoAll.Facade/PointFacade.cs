@@ -228,13 +228,14 @@ namespace PontoAll.Facade
             }
 
             var overtimeSpan = TimeSpan.FromHours(sumOvertime);
+            var typeOvertime = overtimeSpan.Hours >= 0 ? string.Empty : "-";
+            var overtimeHours = overtimeSpan.Hours >= 0 ? overtimeSpan.Hours : overtimeSpan.Hours * -1;
+            var overtimeMinutes = overtimeSpan.Minutes >= 0 ? overtimeSpan.Minutes : overtimeSpan.Minutes * -1;
 
-            string overtimeHours = "00";
-            string overtimeMinutes = "00";
+            var overtimeHoursString = overtimeHours > 10 ? overtimeHours.ToString() : $"0{overtimeHours}";
+            var overtimeMinutesString = overtimeMinutes > 10 ? overtimeMinutes.ToString() : $"0{overtimeMinutes}";
 
-            var overtime = $"00:00";
-
-            return overtime;
+            return $"{typeOvertime}{overtimeHoursString}:{overtimeMinutesString}";
         }
     }
 }
