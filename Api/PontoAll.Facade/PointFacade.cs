@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using PontoAll.Facade.Interfaces;
 using PontoAll.Models.Dtos;
 using PontoAll.Models.Points;
@@ -66,7 +65,8 @@ namespace PontoAll.Facade
             return new PointViewModel()
             {
                 DatePoint = point.DatePoint,
-                TypePoint = point.TypePoint.ToString()
+                TypePoint = point.TypePoint.ToString(),
+                UserPhotograph = point.UserPhotograph
             };
         }
 
@@ -88,19 +88,6 @@ namespace PontoAll.Facade
             var addressId = await _pointService.RegisterAddressPointAsync(addressPoint);
 
             return addressId;
-        }
-
-        private IFormFile ConvertBase64ToImageAsync(string imageBase64)
-        {
-            byte[] bytes = Convert.FromBase64String(imageBase64);
-
-            MemoryStream stream = new MemoryStream(bytes);
-
-            var imageName = Guid.NewGuid().ToString();
-
-            IFormFile file = new FormFile(stream, 0, bytes.Length, imageName, imageName);
-
-            return file;
         }
 
         private async Task<string> ConvertImageToBase64Async(IFormFile userPhotograph)
@@ -129,6 +116,18 @@ namespace PontoAll.Facade
             */
         }
 
+        private FormFile ConvertBase64ToImage(string imageBase64)
+        {
+            byte[] bytes = Convert.FromBase64String(imageBase64);
+            MemoryStream stream = new MemoryStream(bytes);
+
+            var name = Guid.NewGuid().ToString();
+
+            FormFile file = new FormFile(stream, 0, bytes.Length, name, name);
+
+            return file;
+        }
+
         public async Task<PointViewModel> GetCurrentPointAsync(IEnumerable<Claim> claims)
         {
             var dateNow = DateTime.Now;
@@ -148,7 +147,8 @@ namespace PontoAll.Facade
             var pointViewModel = new PointViewModel()
             {
                 DatePoint = currentPoint.DatePoint,
-                TypePoint = currentPoint.TypePoint.ToString()
+                TypePoint = currentPoint.TypePoint.ToString(),
+                UserPhotograph = currentPoint.UserPhotograph
             };
 
             return pointViewModel;
@@ -168,10 +168,11 @@ namespace PontoAll.Facade
 
             var points = await _pointService.GetPointsAsync(user.Id);
 
-            var pointsViewModel = points.Select(point => new PointViewModel() 
+            var pointsViewModel = points.Select(point => new PointViewModel()
             {
                 DatePoint = point.DatePoint,
-                TypePoint = point.TypePoint.ToString()
+                TypePoint = point.TypePoint.ToString(),
+                UserPhotograph = point.UserPhotograph
             }).ToList();
 
             var overtime = CalculateOvertimeAsync(points);
@@ -192,7 +193,8 @@ namespace PontoAll.Facade
             var pointsViewModel = points.Select(point => new PointViewModel()
             {
                 DatePoint = point.DatePoint,
-                TypePoint = point.TypePoint.ToString()
+                TypePoint = point.TypePoint.ToString(),
+                UserPhotograph = point.UserPhotograph
             }).ToList();
 
             return new UserPointViewModel()
@@ -216,13 +218,12 @@ namespace PontoAll.Facade
 
                 double sumParPoints = 0;
 
-                if (parPoints.Count > default(int)) 
+                if (parPoints.Count > default(int))
                 {
-                    for (int j = 0; j < listParPoints[i].Count(); j += 2)
+                    for (int j = 0; (j + 1) < parPoints.Count(); j += 2)
                     {
                         sumParPoints += parPoints[j].DatePoint.Subtract(parPoints[j + 1].DatePoint).TotalHours;
                     }
-
                     sumOvertime += sumParPoints - 8;
                 }
             }

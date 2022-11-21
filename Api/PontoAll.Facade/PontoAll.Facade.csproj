@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PontoAll.Models\PontoAll.Models.csproj" />
     <ProjectReference Include="..\PontoAll.Service\PontoAll.Service.csproj" />
   </ItemGroup>
