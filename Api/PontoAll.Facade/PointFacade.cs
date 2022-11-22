@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PontoAll.Facade
@@ -70,12 +71,26 @@ namespace PontoAll.Facade
             };
         }
 
+        private string ClearDocument(string document)
+        {
+            string pattern = @"(?i)[\-*\.*\\*\/*\s*]";
+
+            string replacement = string.Empty;
+
+            Regex rgx = new Regex(pattern);
+
+            string cleanDocument = rgx.Replace(document, replacement);
+
+            return cleanDocument;
+        }
+
+
         private async Task<Guid> CreateAddressPointAsync(AddressInputModel addressInputModel)
         {
             var addressPoint = new AddressPoint()
             {
                 AddressPointId = Guid.NewGuid(),
-                CEP = addressInputModel.CEP,
+                CEP = ClearDocument(addressInputModel.CEP),
                 City = addressInputModel.City,
                 Country = addressInputModel.Country,
                 District = addressInputModel.District,
