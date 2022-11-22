@@ -38,7 +38,7 @@ namespace PontoAll.Facade
 
             var dateNow = DateTime.Now;
 
-            var lastPointCurrentDate = await _pointService.VerifyLastPointCurrentDateAsync(dateNow);
+            var lastPointCurrentDate = await _pointService.VerifyLastPointCurrentDateAsync(dateNow, user.Id);
 
             var typePoint = TypePointEnum.Entry;
 

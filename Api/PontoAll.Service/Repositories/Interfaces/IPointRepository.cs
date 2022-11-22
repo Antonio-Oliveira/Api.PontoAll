@@ -11,7 +11,7 @@ namespace PontoAll.Service.Repositories.Interfaces
     {
         Task RegisterPointAsync(Point point);
 
-        Task<Point> VerifyLastPointCurrentDateAsync(DateTime datePoint);
+        Task<Point> VerifyLastPointCurrentDateAsync(DateTime datePoint, string userId);
 
         Task<Guid> RegisterAddressPointAsync(AddressPoint addressPoint);
 

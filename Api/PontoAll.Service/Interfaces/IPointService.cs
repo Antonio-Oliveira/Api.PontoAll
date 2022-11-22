@@ -10,7 +10,7 @@ namespace PontoAll.Service.Interfaces
 {
     public interface IPointService
     {
-        Task<Point> VerifyLastPointCurrentDateAsync(DateTime datePoint);
+        Task<Point> VerifyLastPointCurrentDateAsync(DateTime datePoint, string userId);
 
         Task RegisterPointAsync(Point point);
 

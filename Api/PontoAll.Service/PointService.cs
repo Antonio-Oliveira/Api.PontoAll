@@ -51,9 +51,9 @@ namespace PontoAll.Service
             await _pointRepository.RegisterPointAsync(point);
         }
 
-        public async Task<Point> VerifyLastPointCurrentDateAsync(DateTime datePoint)
+        public async Task<Point> VerifyLastPointCurrentDateAsync(DateTime datePoint, string userId)
         {
-            var lastPointCurrentDate = await _pointRepository.VerifyLastPointCurrentDateAsync(datePoint);
+            var lastPointCurrentDate = await _pointRepository.VerifyLastPointCurrentDateAsync(datePoint, userId);
 
             return lastPointCurrentDate;
         }

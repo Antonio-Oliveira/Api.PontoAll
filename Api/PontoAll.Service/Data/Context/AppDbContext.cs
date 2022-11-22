@@ -4,12 +4,6 @@ using PontoAll.Models.Companys;
 using PontoAll.Models.Points;
 using PontoAll.Models.User;
 using PontoAll.Service.Data.Mappings;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PontoAll.Service.Data.Context
 {

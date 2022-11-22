@@ -56,9 +56,9 @@ namespace PontoAll.Service.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Point> VerifyLastPointCurrentDateAsync(DateTime datePoint)
+        public async Task<Point> VerifyLastPointCurrentDateAsync(DateTime datePoint, string userId)
         {
-            var currentPoints = await _context.Points.Where(p => p.DatePoint.Date == datePoint.Date).OrderByDescending(p => p.DatePoint).FirstOrDefaultAsync();
+            var currentPoints = await _context.Points.Where(p => p.DatePoint.Date == datePoint.Date && p.UserId == userId).OrderByDescending(p => p.DatePoint).FirstOrDefaultAsync();
 
             return currentPoints;
         }
